@@ -1,24 +1,73 @@
-import logo from './logo.svg';
+import {  useCallback,useEffect,useState} from 'react';
 import './App.css';
+import video from './food.mp4'
+import Recipe from './recipe';
+
+
 
 function App() {
+
+  const MY_ID = "7391fdd1";
+  const MY_KEY ="bef58dfcb3ff0fe0c10feaee88a8d114";
+
+  const [mySearch, setMySearch] = useState('');
+  const [myRecipes, setMyRecipes] = useState([]);
+
+  const getRecipe = useCallback( async () => {
+    const response = await fetch (`https://api.edamam.com/search?q=salmon&app_id=${MY_ID}&app_key=${MY_KEY}`);
+    const data = await response.json();
+    setMyRecipes(data.hits)
+    console.log(data.hits)
+  },[])
+
+  useEffect(()=> {
+    getRecipe()
+  },[getRecipe])
+
+  const myRecipeSearch = (e) =>{
+    console.log(e.target.value)
+    setMySearch(e.target.value)
+  }
+  
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+          <video autoPlay muted loop>
+            <source src={video} type="video/mp4" />
+          </video>
+
+          <h1>Find a Recipe</h1>
+      </div>
+      
+      <div className='container'>
+        <form>
+          <input className='search' placeholder='Search...' onChange={myRecipeSearch} value={mySearch}></input>
+        </form>
+        
+
+        <div className='container'>
+          <button>
+            <img src="https://cdn-icons-png.flaticon.com/512/622/622669.png" alt="loupe" width="40px"/>
+          </button>
+        </div>
+        </div>
+        
+        <div className='conatiner'>
+        {
+              myRecipes.map(element => {
+                <Recipe label={element.recipe.label} image={element.recipe.image} calories={element.recipe.calories}/>
+              })
+            }
+        
+        </div>
+            
+
+      
+
+      
     </div>
+    
   );
 }
 
