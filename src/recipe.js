@@ -1,9 +1,26 @@
 function Recipe({label,image,calories}){
     return (
-        <div>
+         <div>
+            <div  className="container">
             <h3>{label}</h3>
-            <img src={image} alt='recipe photo'/>
-            <p>{calories.toFixed()}</p>
+            </div>
+
+            <div  className="container">
+            <img src={image} alt='recipe'/>
+            </div>
+
+            <ul className="list">
+                {ingredients.map(ingredient => {
+                    <li className="icon">{ingredient}</li>
+                })}
+            </ul>
+
+            <div  className="container">
+                
+            <p className="par">{calories.toFixed()} calories</p>
+            </div>
+            
+            
         </div>
     )
 }
