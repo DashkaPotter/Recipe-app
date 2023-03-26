@@ -12,13 +12,14 @@ function App() {
 
   const [mySearch, setMySearch] = useState('');
   const [myRecipes, setMyRecipes] = useState([]);
+  const [wordSubmitted, setWordSubmitted] = useState('salmon')
 
   const getRecipe = useCallback( async () => {
-    const response = await fetch (`https://api.edamam.com/search?q=salmon&app_id=${MY_ID}&app_key=${MY_KEY}`);
+    const response = await fetch (`https://api.edamam.com/search?q=${wordSubmitted}&app_id=${MY_ID}&app_key=${MY_KEY}`);
     const data = await response.json();
     setMyRecipes(data.hits)
     console.log(data.hits)
-  },[])
+  },[wordSubmitted])
 
   useEffect(()=> {
     getRecipe()
@@ -28,7 +29,10 @@ function App() {
     console.log(e.target.value)
     setMySearch(e.target.value)
   }
-  
+  const finalSearch = (e) => {
+  e.preventDefault();
+  setWordSubmitted(mySearch);
+}
 
   return (
     <div className="App">
@@ -41,7 +45,7 @@ function App() {
       </div>
       
       <div className='container'>
-        <form>
+        <form onSubmit={finalSearch}>
           <input className='search' placeholder='Search...' onChange={myRecipeSearch} value={mySearch}></input>
         </form>
         
@@ -56,7 +60,7 @@ function App() {
         <div className='conatiner'>
         {
               myRecipes.map(element => {
-                <Recipe label={element.recipe.label} image={element.recipe.image} calories={element.recipe.calories}/>
+                <Recipe label={element.recipe.label} image={element.recipe.image} calories={element.recipe.calories} ingredients={element.recipe.ingredientLines}/>
               })
             }
         
