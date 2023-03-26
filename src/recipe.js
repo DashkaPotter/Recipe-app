@@ -1,4 +1,4 @@
-function Recipe({label,image,calories}){
+function Recipe({label,image,calories,ingredients}){
     return (
          <div>
             <div  className="container">
